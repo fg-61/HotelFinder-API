@@ -1,5 +1,4 @@
 ﻿using HotelFinder.Business.Abstract;
-using HotelFinder.Business.Concrete;
 using HotelFinder.Entities;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
@@ -16,12 +15,24 @@ namespace HotelFinder.API.Controllers
             _hotelService = hotelService;
         }
 
+        // for using swagger comment -> HotelFinder.API properties -> Build -> Output -> Generate a file containing API documentation (click)
+
+        /// <summary>
+        /// Get All Hotels
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public IActionResult GetHotel()
         {
             List<Hotel> hotels = _hotelService.GetAllHotels();
             return Ok(hotels);
         }
+
+        /// <summary>
+        /// Get hotel by id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet]
         [Route("[action]/{id}")]    // api/hotels/gethotelbyid/2
         public IActionResult GetHotelById(int id)
@@ -33,6 +44,12 @@ namespace HotelFinder.API.Controllers
             }
             return NotFound();  // 404
         }
+
+        /// <summary>
+        /// Get hotel by name
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
         [HttpGet]
         [Route("[action]/{name}")]    // api/hotels/gethotelbyname/titanic
         public IActionResult GetHotelByName(string name)
@@ -45,6 +62,11 @@ namespace HotelFinder.API.Controllers
             return NotFound();  // 404
         }
 
+        /// <summary>
+        /// Create an hotel
+        /// </summary>
+        /// <param name="hotel"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("[action]")]
         public IActionResult CreateHotel([FromBody]Hotel hotel)
@@ -52,6 +74,12 @@ namespace HotelFinder.API.Controllers
             var createdHotel = _hotelService.CreateHotel(hotel);
             return CreatedAtAction("Get", new { id = createdHotel.Id }, createdHotel);  // 201 + data
         }
+
+        /// <summary>
+        /// Update hotel
+        /// </summary>
+        /// <param name="hotel"></param>
+        /// <returns></returns>
         [HttpPut]
         [Route("[action]")]
         public IActionResult UpdateHotel([FromBody]Hotel hotel)
@@ -64,6 +92,12 @@ namespace HotelFinder.API.Controllers
             }
             return NotFound();    // 404
         }
+
+        /// <summary>
+        /// Delete hotel by id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpDelete]
         [Route("[action]/{id}")]
         public IActionResult DeleteHotelById(int id)
