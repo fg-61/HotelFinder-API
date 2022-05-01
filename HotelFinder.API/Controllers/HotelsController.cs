@@ -15,14 +15,16 @@ namespace HotelFinder.API.Controllers
         {
             _hotelService = hotelService;
         }
+
         [HttpGet]
-        public IActionResult Get()
+        public IActionResult GetHotel()
         {
             List<Hotel> hotels = _hotelService.GetAllHotels();
             return Ok(hotels);
         }
-        [HttpGet("{id}")]
-        public IActionResult GetById(int id)
+        [HttpGet]
+        [Route("[action]/{id}")]    // api/hotels/gethotelbyid/2
+        public IActionResult GetHotelById(int id)
         {
             var hotel = _hotelService.GetHotelById(id);
             if (hotel != null)
@@ -31,25 +33,40 @@ namespace HotelFinder.API.Controllers
             }
             return NotFound();  // 404
         }
+        [HttpGet]
+        [Route("[action]/{name}")]    // api/hotels/gethotelbyname/titanic
+        public IActionResult GetHotelByName(string name)
+        {
+            var hotel = _hotelService.GetHotelByName(name);
+            if (hotel != null)
+            {
+                return Ok(hotel);   // 200 + data
+            }
+            return NotFound();  // 404
+        }
+
         [HttpPost]
-        public IActionResult Post([FromBody]Hotel hotel)
+        [Route("[action]")]
+        public IActionResult CreateHotel([FromBody]Hotel hotel)
         {
             var createdHotel = _hotelService.CreateHotel(hotel);
-            return CreatedAtAction("GetById", new { id = createdHotel.Id }, createdHotel);  // 201 + data
+            return CreatedAtAction("Get", new { id = createdHotel.Id }, createdHotel);  // 201 + data
         }
         [HttpPut]
-        public IActionResult Put([FromBody]Hotel hotel)
+        [Route("[action]")]
+        public IActionResult UpdateHotel([FromBody]Hotel hotel)
         {
             var updatedHotel = _hotelService.GetHotelById(hotel.Id);
             if(updatedHotel != null)
             {
-                _hotelService.UpdateHotel(updatedHotel);
-                return Ok(updatedHotel);    // 200 + data
+                _hotelService.UpdateHotel(hotel);
+                return Ok(hotel);    // 200 + data
             }
             return NotFound();    // 404
         }
-        [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
+        [HttpDelete]
+        [Route("[action]/{id}")]
+        public IActionResult DeleteHotelById(int id)
         {
             var deletedHotel = _hotelService.GetHotelById(id);
             if(deletedHotel != null)

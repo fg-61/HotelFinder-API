@@ -32,11 +32,16 @@ namespace HotelFinder.Business.Concrete
 
         public Hotel GetHotelById(int id)
         {
-            if(id > 0)
+            if (id > 0)
             {
                 return _hotelRepository.GetHotelById(id);
             }
             throw new Exception("Id can not be less than 1.");
+        }
+
+        public Hotel GetHotelByName(string name)
+        {
+            return _hotelRepository.GetHotelByName(name);
         }
 
         public Hotel UpdateHotel(Hotel hotel)
